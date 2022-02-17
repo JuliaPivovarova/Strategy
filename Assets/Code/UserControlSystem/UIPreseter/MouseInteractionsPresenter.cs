@@ -2,6 +2,7 @@ using System.Linq;
 using Code.Abstractions;
 using Code.UserControlSystem.UIModel;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Code.UserControlSystem.UIPreseter
 {
@@ -9,6 +10,7 @@ namespace Code.UserControlSystem.UIPreseter
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private SelectableValue _selectedObject;
+        [SerializeField] private EventSystem _eventSystem;
     
         private void Update()
         {
@@ -26,24 +28,13 @@ namespace Code.UserControlSystem.UIPreseter
                 .Select(hit => hit.collider.GetComponentInParent<ISelectable>())
                 .Where(c => c != null)
                 .FirstOrDefault();
-            var unitProducer = hits
-                .Select(hit => hit.collider.GetComponentInParent<IUnitProducer>())
-                .Where(u => u != null)
-                .FirstOrDefault();
-            
+
             if (selectable == default)
             {
                 return;
             }
 
             _selectedObject.SetValue(selectable);
-            
-            if (unitProducer == default)
-            {
-                return;
-            }
-            
-            unitProducer.ProduceUnit();
         }
     }
 }

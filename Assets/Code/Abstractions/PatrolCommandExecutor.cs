@@ -6,7 +6,7 @@ namespace Code.Abstractions
     {
         public override void ExecuteSpecificCommand(IPatrolCommand command)
         {
-            Debug.Log("Patrol!");
+            Debug.Log($"{name} patrol from {command.From} to {command.To}!");
         }
     }
 }

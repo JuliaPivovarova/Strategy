@@ -1,0 +1,18 @@
+{
+    "name": "CommandCreaters",
+    "rootNamespace": "",
+    "references": [
+        "GUID:687dbeb8ca818504f809d0ea5b399d86",
+        "GUID:d5db394424a57c14893357d5dbfa9559",
+        "GUID:03e26ca7bf7030b4c93279c298ed3329"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

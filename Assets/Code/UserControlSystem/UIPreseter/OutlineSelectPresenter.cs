@@ -1,5 +1,6 @@
 using Code.Abstractions;
 using Code.UserControlSystem.UIModel;
+using Code.UserControlSystem.UIModel.CommandCreators;
 using Code.UserControlSystem.UIView;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Code.UserControlSystem.UIPreseter
 
         private void Start()
         {
-            _selectedObject.OnSelected += SetSelected;
+            _selectedObject.OnNewValue += SetSelected;
             SetSelected(_selectedObject.CurrentValue);
         }
     

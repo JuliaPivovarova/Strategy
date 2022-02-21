@@ -33,14 +33,14 @@
             v2f vert (appdata_base v)
             {
                 v2f o;
-                v.vertex.xyz += v.normal * _OutlineScale;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                //v.vertex.xyz += v.normal * _OutlineScale;
+                //o.vertex = UnityObjectToClipPos(v.vertex);
 
                 //Метод 2
-                //float4 pos = mul(UNITY_MATRIX_V, mul(unity_ObjectToWorld, v.vertex));
-                //float3 normal = normalize(mul((float3x3)UNITY_MATRIX_MV, v.normal));
-                //pos += float4(normal, 0) * _OutlineScale;
-                //o.vertex = mul(UNITY_MATRIX_P, pos);
+                float4 pos = mul(UNITY_MATRIX_V, mul(unity_ObjectToWorld, v.vertex));
+                float3 normal = normalize(mul((float3x3)UNITY_MATRIX_MV, v.normal));
+                pos += float4(normal, 0) * _OutlineScale;
+                o.vertex = mul(UNITY_MATRIX_P, pos);
 
                 //Метод 3
                 //o.vertex = UnityObjectToClipPos(v.vertex);

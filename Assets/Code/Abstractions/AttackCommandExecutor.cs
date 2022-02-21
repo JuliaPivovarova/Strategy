@@ -6,7 +6,7 @@ namespace Code.Abstractions
     {
         public override void ExecuteSpecificCommand(IAttackCommand command)
         {
-            Debug.Log("Attack!");
+            Debug.Log($"{name} is attacking {command.Target}!");
         }
     }
 }

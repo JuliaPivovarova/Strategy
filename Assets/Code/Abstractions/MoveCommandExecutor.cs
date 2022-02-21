@@ -6,7 +6,7 @@ namespace Code.Abstractions
     {
         public override void ExecuteSpecificCommand(IMoveCommand command)
         {
-            Debug.Log("Move!");
+            Debug.Log($"{name} is moving to {command.Target}!");
         }
     }
 }

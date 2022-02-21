@@ -33,16 +33,42 @@ namespace Code.UserControlSystem.UIView
         {
             foreach (var currentExecutor in commandExecutors)
             {
-                var buttonGameObject = _buttonsByExecutorType
-                    .Where(type => type
-                        .Key
-                        .IsAssignableFrom(currentExecutor.GetType()))
-                    .First()
-                    .Value;
+                //var buttonGameObject = _buttonsByExecutorType
+                    //.Where(type => type
+                    //.Key
+                    //.IsAssignableFrom(currentExecutor.GetType()))
+                    //.First()
+                    //.Value;
+                    var buttonGameObject = GetButtonGameObjectByType(currentExecutor.GetType()); 
                 buttonGameObject.SetActive(true);
                 var button = buttonGameObject.GetComponent<Button>();
                 button.onClick.AddListener(() => OnClick?.Invoke(currentExecutor));
             }
+        }
+
+        public void BlocInteractions(ICommandExecutor commandExecutor)
+        {
+            UnblocAllInteractions();
+            GetButtonGameObjectByType(commandExecutor.GetType()).GetComponent<Selectable>().interactable = false;
+        }
+
+        private GameObject GetButtonGameObjectByType(Type executorInstanceType)
+        {
+            return _buttonsByExecutorType
+                .Where(type => type.Key.IsAssignableFrom(executorInstanceType))
+                .First()
+                .Value;
+        }
+
+        public void UnblocAllInteractions() => SetInteractable(true);
+
+        private void SetInteractable(bool value)
+        {
+            _attackButton.GetComponent<Selectable>().interactable = value;
+            _moveButton.GetComponent<Selectable>().interactable = value;
+            _patrolButton.GetComponent<Selectable>().interactable = value;
+            _holdPositionButton.GetComponent<Selectable>().interactable = value;
+            _produceUnitButton.GetComponent<Selectable>().interactable = value;
         }
 
         public void Clear()

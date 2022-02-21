@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Code.Abstractions;
 using Code.UserControlSystem.UIModel;
+using Code.UserControlSystem.UIModel.CommandCreators;
 using UnityEngine.UI;
 
 namespace Code.UserControlSystem.UIPreseter
@@ -17,7 +18,7 @@ namespace Code.UserControlSystem.UIPreseter
         
         private void Start()
         {
-            _selectedValue.OnSelected += OnSelected;
+            _selectedValue.OnNewValue += OnSelected;
             OnSelected(_selectedValue.CurrentValue);
         }
 

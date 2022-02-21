@@ -6,7 +6,7 @@ namespace Code.Abstractions
     {
         public override void ExecuteSpecificCommand(IHoldPositionCommand command)
         {
-            Debug.Log("Hold Position!");
+            Debug.Log($"{name} is holding position {command.PositionToHold}!");
         }
     }
 }

@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Threading;
+using Code.Abstractions;
 
-namespace Code.Abstractions
+namespace Code.Core
 {
     public class HoldPositionCommandExecutor: CommandExecutorBase<IHoldPositionCommand>
     {
+        public CancellationTokenSource CtSource { get; set; }
         public override void ExecuteSpecificCommand(IHoldPositionCommand command)
         {
-            Debug.Log($"{name} is holding position {command.PositionToHold}!");
+            CtSource?.Cancel();
         }
     }
 }

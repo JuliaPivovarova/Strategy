@@ -1,18 +1,10 @@
-﻿using System;
-using Code.Abstractions;
-using Code.Utils;
-using Zenject;
+﻿using Code.Abstractions;
+using UnityEngine;
 
 namespace Code.UserControlSystem.UIModel.CommandCreators
 {
-    public class HoldPositionCommandCreator: CommandCreatorBase<IHoldPositionCommand>
+    public class HoldPositionCommandCreator: CancellableCommandCreatorBase<IHoldPositionCommand, Vector3>
     {
-        [Inject] private AssetContext _context;
-        [Inject] private SelectableValue _selectable;
-
-        protected override void ClassSpecificCommandCreation(Action<IHoldPositionCommand> creationCallback)
-        {
-            creationCallback?.Invoke(_context.Inject(new HoldPositionCommand(_selectable.CurrentValue.StayPoint.position)));
-        }
+        protected override IHoldPositionCommand CreateCommand(Vector3 argument) => new HoldPositionCommand(argument);
     }
 }

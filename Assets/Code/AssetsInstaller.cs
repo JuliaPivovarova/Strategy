@@ -1,4 +1,5 @@
-﻿using Code.UserControlSystem.UIModel.CommandCreators;
+﻿using Code.Abstractions;
+using Code.UserControlSystem.UIModel.CommandCreators;
 using Code.Utils;
 using UnityEngine;
 using Zenject;
@@ -17,5 +18,7 @@ public class AssetsInstaller: ScriptableObjectInstaller<AssetsInstaller>
         Container.Bind<Vector3Value>().FromInstance(_groundClicksRMB);
         Container.Bind<SelectableValue>().FromInstance(_selectableValue);
         Container.Bind<AttackableValue>().FromInstance(_attackableValue);
+        Container.Bind<IAwaitable<IAttackable>>().FromInstance(_attackableValue);
+        Container.Bind<IAwaitable<Vector3>>().FromInstance(_groundClicksRMB);
     }
 }

@@ -33,16 +33,14 @@ namespace Code.UserControlSystem.UIView
         {
             foreach (var currentExecutor in commandExecutors)
             {
-                //var buttonGameObject = _buttonsByExecutorType
-                    //.Where(type => type
-                    //.Key
-                    //.IsAssignableFrom(currentExecutor.GetType()))
-                    //.First()
-                    //.Value;
-                    var buttonGameObject = GetButtonGameObjectByType(currentExecutor.GetType()); 
+                var buttonGameObject = GetButtonGameObjectByType(currentExecutor.GetType()); 
                 buttonGameObject.SetActive(true);
                 var button = buttonGameObject.GetComponent<Button>();
                 button.onClick.AddListener(() => OnClick?.Invoke(currentExecutor));
+                if (currentExecutor is CommandExecutorBase<IMoveCommand>)
+                {
+                    OnClick?.Invoke(currentExecutor);
+                }
             }
         }
 

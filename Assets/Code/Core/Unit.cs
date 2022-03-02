@@ -15,7 +15,7 @@ namespace Code.Core
         public float MaxHealth => _maxHealth;
         public Transform StayPoint => _stayPoint;
         public Sprite Icon => _icon;
-        
+
         private void Start()
         {
             _stayPoint = GetComponent<Transform>();

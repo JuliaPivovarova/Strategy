@@ -2,7 +2,8 @@
     "name": "UIView",
     "rootNamespace": "",
     "references": [
-        "GUID:687dbeb8ca818504f809d0ea5b399d86"
+        "GUID:687dbeb8ca818504f809d0ea5b399d86",
+        "GUID:cdfd90778122a9a45a732025fb8aa2bf"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

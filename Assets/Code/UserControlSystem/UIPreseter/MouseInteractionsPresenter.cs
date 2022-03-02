@@ -1,6 +1,7 @@
 using System.Linq;
 using Code.Abstractions;
 using Code.UserControlSystem.UIModel.CommandCreators;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,30 +22,27 @@ namespace Code.UserControlSystem.UIPreseter
         private void Start()
         {
             _groundPlane = new Plane(_groundTransform.up, 0);
-        }
 
-        private void Update()
-        {
-            if (!Input.GetMouseButtonUp(0) && !Input.GetMouseButton(1))
-            {
-                return;
-            }
+            var everyStream = Observable.EveryUpdate().Where(_ => !_eventSystem.IsPointerOverGameObject());
+            var leftMouseButtonStream = everyStream.Where(_ => Input.GetMouseButtonDown(0));
+            var rightMouseButtonStream = everyStream.Where(_ => Input.GetMouseButtonDown(1));
 
-            if (_eventSystem.IsPointerOverGameObject())
-            {
-                return;
-            }
+            var leftMouseButtonRay = leftMouseButtonStream.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
+            var rightMouseButtonRay = rightMouseButtonStream.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
 
-            var ray = _camera.ScreenPointToRay(Input.mousePosition);
-            var hits = Physics.RaycastAll(ray);
-            
-            if (Input.GetMouseButtonUp(0))
+            var lmbHits = leftMouseButtonRay.Select(ray => Physics.RaycastAll(ray));
+            var rmbHits = rightMouseButtonRay.Select(ray => (ray, Physics.RaycastAll(ray)));
+
+            lmbHits.Subscribe(hits =>
             {
                 HitAnObject<ISelectable>(hits, out var selectable);
                 _selectedObject.SetValue(selectable);
-            }
-            else
+            });
+
+            rmbHits.Subscribe(hitsData =>
             {
+                var (ray, hits) = hitsData;
+                
                 if (HitAnObject<IAttackable>(hits, out var attackable))
                 {
                     _attackableRMB.SetValue(attackable);
@@ -53,7 +51,7 @@ namespace Code.UserControlSystem.UIPreseter
                 {
                     _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
                 }
-            }
+            });
         }
 
         private bool HitAnObject<T>(RaycastHit[] hits, out T result) where T: class

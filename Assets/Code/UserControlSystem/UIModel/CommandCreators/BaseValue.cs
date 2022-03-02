@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.Abstractions;
+using UniRx;
 using UnityEngine;
 
 namespace Code.UserControlSystem.UIModel.CommandCreators
@@ -22,12 +23,13 @@ namespace Code.UserControlSystem.UIModel.CommandCreators
             }
         }
         
-        public T CurrentValue { get; private set; }
+        //public T CurrentValue { get; private set; }
+        public ReactiveProperty<T> CurrentValue { get; private set; }
         public Action<T> OnNewValue;
 
         public void SetValue(T value)
         {
-            CurrentValue = value;
+            CurrentValue.Value = value;
             OnNewValue?.Invoke(value);
         }
 

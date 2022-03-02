@@ -25,7 +25,7 @@ namespace Code.UserControlSystem.UIPreseter
             _model.OnCommandCancel += _view.UnblocAllInteractions;
             
             _selectable.OnNewValue += OnSelected;
-            OnSelected(_selectable.CurrentValue);
+            OnSelected(_selectable.CurrentValue.Value);
         }
 
         private void OnSelected(ISelectable selectable)

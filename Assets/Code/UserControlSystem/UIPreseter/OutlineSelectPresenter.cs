@@ -16,7 +16,7 @@ namespace Code.UserControlSystem.UIPreseter
         private void Start()
         {
             _selectedObject.OnNewValue += SetSelected;
-            SetSelected(_selectedObject.CurrentValue);
+            SetSelected(_selectedObject.CurrentValue.Value);
         }
     
         private void SetSelected(ISelectable selectable)

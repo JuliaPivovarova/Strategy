@@ -9,6 +9,6 @@ namespace Code.UserControlSystem.UIModel.CommandCreators
         [Inject] private SelectableValue _selectable;
 
         protected override IPatrolCommand CreateCommand(Vector3 argument) =>
-            new PatrolCommand(_selectable.CurrentValue.StayPoint.position, argument);
+            new PatrolCommand(_selectable.CurrentValue.Value.StayPoint.position, argument);
     }
 }

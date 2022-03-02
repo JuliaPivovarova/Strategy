@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Threading.Tasks;
 using Code.Abstractions;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -17,7 +16,7 @@ namespace Code.Core
 
         private float _health = 1000;
         private Transform _stayPoint;
-        private bool _isCreating;
+        private bool _creationStarted = false;
 
         public float Health => _health;
         public float MaxHealth => _maxHealth;
@@ -31,30 +30,31 @@ namespace Code.Core
 
         public override void ExecuteSpecificCommand(IProduceUnitCommand command)
         {
-            WaitForCreation(command);
-        }
-
-        private async void WaitForCreation(IProduceUnitCommand command)
-        {
-            _isCreating = true;
-            //_waitForCreationSlider.gameObject.SetActive(true);
-            //WaitForSlider();
-            await Task.Delay(1000);
-            
-            _waitForCreationSlider.gameObject.SetActive(false);
-            Instantiate(command.UnitPrefab, new Vector3(Random.Range(-10,10), 0, Random.Range(-10,10)), Quaternion.identity, 
-                _unitsParent);
-        }
-
-        private void WaitForSlider()
-        {
-            while (_waitForCreationSlider.value < _waitForCreationSlider.maxValue)
+            if (!_creationStarted)
             {
-                _waitForCreationSlider.value += 0.001f * Time.deltaTime;
+                WaitForCreation(command);
             }
-            if (_waitForCreationSlider.value >= _waitForCreationSlider.maxValue)
+        }
+
+        private void WaitForCreation(IProduceUnitCommand command)
+        {
+            _creationStarted = true;
+            _waitForCreationSlider.gameObject.SetActive(true);
+            _waitForCreationSlider.OnValueChangedAsObservable().Where(value => value >= 1).Subscribe(value =>
             {
-                _isCreating = false;
+                _waitForCreationSlider.gameObject.SetActive(false);
+                Instantiate(command.UnitPrefab, new Vector3(Random.Range(-10,10), 0, Random.Range(-10,10)), Quaternion.identity, 
+                    _unitsParent);
+                _creationStarted = false;
+                _waitForCreationSlider.value = 0;
+            });
+        }
+        
+        private void Update()
+        {
+            if (_creationStarted)
+            {
+                _waitForCreationSlider.value += 0.1f * Time.deltaTime;
             }
         }
     }

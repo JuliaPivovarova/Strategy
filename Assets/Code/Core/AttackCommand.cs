@@ -1,6 +1,6 @@
 ﻿using Code.Abstractions;
 
-namespace Code.UserControlSystem
+namespace Code.Core
 {
     public class AttackCommand: IAttackCommand
     {

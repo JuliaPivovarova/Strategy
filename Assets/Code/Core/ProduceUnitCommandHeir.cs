@@ -1,4 +1,4 @@
-﻿namespace Code.UserControlSystem
+﻿namespace Code.Core
 {
     public class ProduceUnitCommandHeir: ProduceUnitsCommand
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.Abstractions;
-using Code.UserControlSystem.UIModel.CommandCreators;
+using Code.Core;
+using UnityEngine;
 using Zenject;
 
 namespace Code.UserControlSystem.UIModel
@@ -16,9 +17,10 @@ namespace Code.UserControlSystem.UIModel
         [Inject] private CommandCreatorBase<IMoveCommand> _mover;
         [Inject] private CommandCreatorBase<IHoldPositionCommand> _holderPosition;
         [Inject] private CommandCreatorBase<IPatrolCommand> _patroller;
+        [Inject] private CommandCreatorBase<ISetCollectionPointCommand> _setterCollectionPoint;
         private bool _commandIsPending;
 
-        public void OnCommandButtonClicked(ICommandExecutor commandExecutor)
+        public void OnCommandButtonClicked(ICommandExecutor commandExecutor, ICommandsQueue queue)
         {
             if (_commandIsPending)
             {
@@ -27,21 +29,28 @@ namespace Code.UserControlSystem.UIModel
 
             _commandIsPending = true;
             OnCommandAccepted?.Invoke(commandExecutor);
+            
             _unitProducer.ProcessCommandExecutor(commandExecutor,
-                command => ExecuteCommandWrapper(commandExecutor, command));
+                command => ExecuteCommandWrapper(command, queue));
             _attacker.ProcessCommandExecutor(commandExecutor,
-                command => ExecuteCommandWrapper(commandExecutor, command));
+                command => ExecuteCommandWrapper(command, queue));
             _mover.ProcessCommandExecutor(commandExecutor,
-                command => ExecuteCommandWrapper(commandExecutor, command));
+                command => ExecuteCommandWrapper(command, queue));
             _holderPosition.ProcessCommandExecutor(commandExecutor,
-                command => ExecuteCommandWrapper(commandExecutor, command));
+                command => ExecuteCommandWrapper(command, queue));
             _patroller.ProcessCommandExecutor(commandExecutor,
-                command => ExecuteCommandWrapper(commandExecutor, command));
+                command => ExecuteCommandWrapper(command, queue));
+            _setterCollectionPoint.ProcessCommandExecutor(commandExecutor,
+                command => ExecuteCommandWrapper(command, queue));
         }
 
-        private void ExecuteCommandWrapper(ICommandExecutor commandExecutor, object command)
+        private void ExecuteCommandWrapper(object command, ICommandsQueue queue)
         {
-            commandExecutor.ExecuteCommand(command);
+            if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
+            {
+                queue.Clear();
+            }
+            queue.EnqueueCommand(command);
             _commandIsPending = false;
             OnCommandSent?.Invoke();
         }
@@ -59,6 +68,7 @@ namespace Code.UserControlSystem.UIModel
             _mover.ProcessCancel();
             _holderPosition.ProcessCancel();
             _patroller.ProcessCancel();
+            _setterCollectionPoint.ProcessCancel();
             
             OnCommandCancel?.Invoke();
         }

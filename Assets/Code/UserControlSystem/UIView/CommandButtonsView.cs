@@ -14,32 +14,34 @@ namespace Code.UserControlSystem.UIView
         [SerializeField] private GameObject _patrolButton;
         [SerializeField] private GameObject _holdPositionButton;
         [SerializeField] private GameObject _produceUnitButton;
+        [SerializeField] private GameObject _setCollectionPointButton;
 
-        public Action<ICommandExecutor> OnClick;
+        public Action<ICommandExecutor, ICommandsQueue> OnClick;
 
         private Dictionary<Type, GameObject> _buttonsByExecutorType;
 
         private void Start()
         {
             _buttonsByExecutorType = new Dictionary<Type, GameObject>();
-            _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IAttackCommand>), _attackButton);
-            _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IMoveCommand>), _moveButton);
-            _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IPatrolCommand>), _patrolButton);
-            _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IHoldPositionCommand>), _holdPositionButton);
-            _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IProduceUnitCommand>), _produceUnitButton);
+            _buttonsByExecutorType.Add(typeof(ICommandExecutor<IAttackCommand>), _attackButton);
+            _buttonsByExecutorType.Add(typeof(ICommandExecutor<IMoveCommand>), _moveButton);
+            _buttonsByExecutorType.Add(typeof(ICommandExecutor<IPatrolCommand>), _patrolButton);
+            _buttonsByExecutorType.Add(typeof(ICommandExecutor<IHoldPositionCommand>), _holdPositionButton);
+            _buttonsByExecutorType.Add(typeof(ICommandExecutor<IProduceUnitCommand>), _produceUnitButton);
+            _buttonsByExecutorType.Add(typeof(ICommandExecutor<ISetCollectionPointCommand>), _setCollectionPointButton);
         }
 
-        public void MakeLayout(IEnumerable<ICommandExecutor> commandExecutors)
+        public void MakeLayout(IEnumerable<ICommandExecutor> commandExecutors, ICommandsQueue queue)
         {
             foreach (var currentExecutor in commandExecutors)
             {
                 var buttonGameObject = GetButtonGameObjectByType(currentExecutor.GetType()); 
                 buttonGameObject.SetActive(true);
                 var button = buttonGameObject.GetComponent<Button>();
-                button.onClick.AddListener(() => OnClick?.Invoke(currentExecutor));
-                if (currentExecutor is CommandExecutorBase<IMoveCommand>)
+                button.onClick.AddListener(() => OnClick?.Invoke(currentExecutor, queue));
+                if (currentExecutor is ICommandExecutor<IMoveCommand>)
                 {
-                    OnClick?.Invoke(currentExecutor);
+                    OnClick?.Invoke(currentExecutor, queue);
                 }
             }
         }
@@ -67,6 +69,7 @@ namespace Code.UserControlSystem.UIView
             _patrolButton.GetComponent<Selectable>().interactable = value;
             _holdPositionButton.GetComponent<Selectable>().interactable = value;
             _produceUnitButton.GetComponent<Selectable>().interactable = value;
+            _setCollectionPointButton.GetComponent<Selectable>().interactable = value;
         }
 
         public void Clear()

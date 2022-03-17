@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Threading.Tasks;
+using Code.Abstractions;
+using UnityEngine;
 
-namespace Code.Abstractions
+namespace Code.Core
 {
     public class PatrolCommandExecutor: CommandExecutorBase<IPatrolCommand>
     {
-        public override void ExecuteSpecificCommand(IPatrolCommand command)
+        public async override Task ExecuteSpecificCommand(IPatrolCommand command)
         {
             Debug.Log($"{name} patrol from {command.From} to {command.To}!");
         }

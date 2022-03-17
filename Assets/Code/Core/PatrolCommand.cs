@@ -1,7 +1,7 @@
 using Code.Abstractions;
 using UnityEngine;
 
-namespace Code.UserControlSystem
+namespace Code.Core
 {
     public class PatrolCommand : IPatrolCommand
     {

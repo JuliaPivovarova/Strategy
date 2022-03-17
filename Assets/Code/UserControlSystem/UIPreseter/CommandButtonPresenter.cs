@@ -47,7 +47,8 @@ namespace Code.UserControlSystem.UIPreseter
             {
                 var commandExecutor = new List<ICommandExecutor>();
                 commandExecutor.AddRange((selectable as Component).GetComponentsInParent<ICommandExecutor>());
-                _view.MakeLayout(commandExecutor);
+                var queue = (selectable as Component).GetComponentInParent<ICommandsQueue>();
+                _view.MakeLayout(commandExecutor, queue);
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Code.Abstractions
 {
-    public interface IStopCommand: ICommand
+    public interface IUnit
     {
         
     }
